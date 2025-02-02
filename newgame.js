@@ -54,39 +54,14 @@ function startscreen () {
     text ("Skipper Game", 300, 150);
     pop();
 
-    //start game button
-    push();
-    fill(255);
-    rect(300, 250, 170, 50, 10);
-    pop();
-
-    //start game text
-    push();
-    fill(255,0,0);
-    textSize(20);
-    text("Press To Start", 325, 284);
-    pop();
+  
 }
 function gameWin () {
     push();
     background(0);
     fill(255);
     textSize(30);
-    text ("You Won !!! ", 300, 150);
-    pop();
-}
-
-function restart() {
-    //restart button
-    push();
-    fill(255);
-    rect(300, 250, 170, 50, 10);
-    pop();
-    //restart text
-    push();
-    fill(255,0,0);
-    textSize(20);
-    text("Restart Game", 325, 284);
+    text ("You Succeeded! ", 300, 150);
     pop();
 }
 
@@ -95,7 +70,7 @@ function gameLose() {
     background(0);
     fill(255);
     textSize(30);
-    text ("You Lost, Try Again ", 250, 150);
+    text ("You Have Lost", 300, 150);
     pop();
 }
 function gamePlay() {
@@ -117,41 +92,67 @@ function gamePlay() {
   }
 }
 
+
+class Button {
+    constructor(x, y, width, height, text) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.text = text;
+    }
+    draw() {
+        push();
+        translate(this.x+120, this.y);
+        noStroke();
+        fill(255);
+        rect(0, 0, this.width+60, this.height, this.height /4);
+
+
+        //define text
+        fill(255, 0, 0);
+        textSize(this.height / 2);
+        textAlign(CENTER, CENTER);
+        text(this.text, this.width-20, this.height /2);
+        pop();
+    }  
+}
+
+const startButton = new Button(200, 200, 100, 50, "Press to start");
+const homescreen = new Button(200, 200, 100, 50, "Homescreen");
+const restartButton = new Button(200, 200, 100, 50, "Restart Game");
+
+
 class Obstacle {
-    constructor (x, y, width, height, speed) {
+    constructor(x, y, width, height, speed) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.speed = speed;
     }
+    }
+  
   
 
-}
+
+const obstacle1 = new Obstacle();
 
 
-//function level1() {
+//function level1() { 
 //design for level 1
 //}
 
 //function squareMethodsforward
 
 //obsticle objects, färg(3) speed (3)
-//const square1a = new squareForward();
+
 
 //obsticle arrays
 //let squareForward = []
 //let squareBackwards
 
-class road {
-  constructor(x, y) {
-    this.y = y;
-    this.x = x;
-  }
-  draw() {
-    push();
-  }
-}
+
 function draw() {
   background(10, 100, 200);
   safeGround();
@@ -161,16 +162,20 @@ function draw() {
 
   if (gameState === "start") {
     startscreen();
+    startButton.draw();
    } else if(gameState === "playing") {
     gamePlay();
     }else if(gameState === "gameSucceeded"){
         gameWin();
-        restart();
+        homescreen.draw();
     } else if(gameState === "gameOver"){
         gameLose();
-        restart();
+       restartButton.draw();
 
     }
+
+    //loops the obstacle 
+
 
   }
   
