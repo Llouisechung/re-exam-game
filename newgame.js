@@ -148,7 +148,7 @@ class obstacle {
     draw() {
         push();
         fill(0);
-        rect(100, 100, 100, 100);
+        rect(0, 400, 100, 100);
         pop();
     }
 
@@ -156,8 +156,8 @@ class obstacle {
 
 
 const obstacle1 = new obstacle(50, 400, 250, 250, 250, 0, 0);
-
-let obstacles = [obstacle1];
+const obstacle2 = new obstacle(50, 200, 255, 0, 0, 0, 0);
+let obstacles = [obstacle1, obstacle2];
 
 
 //function level1() { 
