@@ -8,18 +8,51 @@ function setup() {
   background(100);
   noStroke();
 }
-function character(x, y) {
-  push();
-  fill(250);
-  square(x, y, 50);
-  pop();
+
+class character {
+  constructor(x, y, width, height) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+  }
+
+  draw() {
+    push();
+    fill(250);
+    square(this.x, this.y, this.width);
+    pop();
+  }
+
+  move(x, y) {
+    this.x += x;
+    this.y += y;
+  }
+
+  update() {
+    this.move(0, 0);
+    if (keyIsDown(UP_ARROW)) {
+      this.move(0, -5);
+    }
+    if (keyIsDown(DOWN_ARROW)) {
+      this.move(0, 5);
+    }
+    if (keyIsDown(LEFT_ARROW)) {
+      this.move(-5, 0);
+    }
+    if (keyIsDown(RIGHT_ARROW)) {
+      this.move(5, 0);
+    }
+  }
 }
+
+const character1 = new character(100, 100, 50, 50);
+
 function safeGround() {
   //Safe grounds between the starting and end ground
   push();
   fill(100);
   rect(0, 170, width, 360);
-  push();
 }
 
 function startingGround() {
@@ -44,7 +77,6 @@ function water() {
   push();
   fill(0, 0, 255);
   rect(0, 100, width, 100);
-
   pop();
 }
 
@@ -73,24 +105,6 @@ function gameLose() {
   text("You Have Lost", 300, 150);
   pop();
 }
-function gamePlay() {
-  character(x, y);
-
-  if (keyIsPressed) {
-    if (keyCode === UP_ARROW) {
-      y -= 5;
-    }
-    if (keyCode === DOWN_ARROW) {
-      y += 5;
-    }
-    if (keyCode === LEFT_ARROW) {
-      x -= 5;
-    }
-    if (keyCode === RIGHT_ARROW) {
-      x += 5;
-    }
-  }
-}
 
 class Button {
   constructor(x, y, width, height, text) {
@@ -100,12 +114,41 @@ class Button {
     this.height = height;
     this.text = text;
   }
+
+  isPressed(x, y) {
+    console.log(
+      this.x +
+        "+" +
+        this.width +
+        "/" +
+        this.y +
+        "+" +
+        this.height +
+        "     " +
+        x +
+        " " +
+        y
+    );
+
+    if (
+      x > this.x &&
+      x < this.x + this.width &&
+      y > this.y &&
+      y < this.y + this.height
+    ) {
+      console.log("DONE");
+      return true;
+    }
+
+    return false;
+  }
+
   draw() {
     push();
-    translate(this.x + 120, this.y);
+    translate(this.x, this.y);
     noStroke();
     fill(255);
-    rect(0, 0, this.width + 60, this.height, this.height / 4);
+    rect(0, 0, this.width, this.height, this.height);
 
     //define text
     fill(255, 0, 0);
@@ -138,12 +181,11 @@ class obstacle {
       this.x = 0 - 100;
     }
 
-    // these following 7 lines are adapted from ChatGPT: https://chatgpt.com/share/67a0d336-b2bc-8005-bc3c-e1986e51bbc7
     if (
-      x < this.x + 100 &&
-      x + 50 > this.x &&
-      y < this.y + 100 &&
-      y + 50 > this.y
+      character1.x < this.x + 100 &&
+      character1.x + 50 > this.x &&
+      character1.y < this.y + 100 &&
+      character1.y + 50 > this.y
     ) {
       gameState = "gameOver";
       gameState = gameLives - 1;
@@ -164,17 +206,19 @@ const obstacle3 = new obstacle(480, 200, 255, 0, 0, 4, 0);
 const obstacle4 = new obstacle(480, 400, 250, 250, 0, 8, 0);
 let obstacles = [obstacle1, obstacle2, obstacle3, obstacle4];
 
-//function level1() {
-//design for level 1
-//}
-
 //function squareMethodsforward
-
-//obsticle objects, färg(3) speed (3)
 
 //obsticle arrays
 //let squareForward = []
 //let squareBackwards
+
+function mousePressed() {
+  if (restartButton.isPressed(mouseX, mouseY)) {
+    gameState = "playing";
+    x = 400;
+    y = 570;
+  }
+}
 
 function draw() {
   background(169, 169, 169);
@@ -182,13 +226,13 @@ function draw() {
   startingGround();
   endingGround();
   water();
-  character(x, y);
 
   if (gameState === "start") {
     startscreen();
     startButton.draw();
   } else if (gameState === "playing") {
-    gamePlay();
+    character1.draw();
+    character1.update();
   } else if (gameState === "gameSucceeded") {
     gameWin();
     homescreen.draw();
@@ -201,6 +245,4 @@ function draw() {
     obstacles[i].update();
     obstacles[i].draw();
   }
-
-  //loops the obstacle
 }
