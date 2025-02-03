@@ -46,7 +46,7 @@ class character {
   }
 }
 
-const character1 = new character(100, 100, 50, 50);
+const character1 = new character(350, 550, 50, 50);
 
 function safeGround() {
   //Safe grounds between the starting and end ground
@@ -206,7 +206,7 @@ const obstacle3 = new obstacle(480, 200, 255, 0, 0, 4, 0);
 const obstacle4 = new obstacle(480, 400, 250, 250, 0, 8, 0);
 let obstacles = [obstacle1, obstacle2, obstacle3, obstacle4];
 
-//function squareMethodsforward
+
 
 //obsticle arrays
 //let squareForward = []
