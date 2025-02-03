@@ -4,28 +4,22 @@ let gameState ="playing";
 
 function setup() {
   createCanvas(800, 600);
-  background(10, 100, 200);
+  background(100);
   noStroke();
 }
 function character(x, y) {
   push();
   fill(250);
-  ellipse(x, y, 40
-
-  );
+  square(x,y,50);
   pop();
 }
 function safeGround() {
   //Safe grounds between the starting and end ground
   push();
   fill(100);
-  rect(0, 300, width, 80);
+  rect(0, 170, width,360);
   push();
 
-  push();
-  fill(100);
-  rect(0, 150, width, 70);
-  push();
 }
 
 function startingGround() {
@@ -33,7 +27,7 @@ function startingGround() {
   push();
 
   fill(169, 169, 169);
-  rect(0, height - 70, width, 80);
+  rect(0, height -100, width, 80);
   pop();
 }
 
@@ -42,8 +36,16 @@ function endingGround() {
   push();
 
   fill(169, 169, 169);
-  rect(0, 0, width, 70);
+  rect(0, 0, width, 100);
   pop();
+}
+
+function water() {
+    push();
+    fill(0,0,255);
+    rect(0, 100, width, 100);
+
+    pop();
 }
 
 function startscreen () {
@@ -130,13 +132,26 @@ class Obstacle {
         this.width = width;
         this.height = height;
         this.speed = speed;
+    
     }
+    if (this.x <= 800) {
+        this.x = this.x + (this.speed);
+    } else if (this.x > 800) {
+        this.x = 0 - 100;
     }
+
+    draw() {
+        
+    }
+
+    }
+
+
   
   
 
 
-const obstacle1 = new Obstacle();
+const Obstacle1 = new Obstacle();
 
 
 //function level1() { 
@@ -154,10 +169,11 @@ const obstacle1 = new Obstacle();
 
 
 function draw() {
-  background(10, 100, 200);
+  background(169, 169, 169);
   safeGround();
   startingGround();
   endingGround();
+  water();
   character(x, y);
 
   if (gameState === "start") {
