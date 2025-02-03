@@ -1,7 +1,7 @@
 let x = 400;
 let y = 570;
 let gameState = "playing";
-let gameLives = 3;
+let gameLives =3;
 
 function setup() {
   createCanvas(800, 600);
@@ -186,9 +186,9 @@ class obstacle {
       character1.x + 50 > this.x &&
       character1.y < this.y + 100 &&
       character1.y + 50 > this.y
-    ) {
+    ) {-
       gameState = "gameOver";
-      gameState = gameLives - 1;
+      gameState = gameLives= 1;
     }
   }
 
