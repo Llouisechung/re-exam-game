@@ -125,7 +125,7 @@ const homescreen = new Button(200, 200, 100, 50, "Homescreen");
 const restartButton = new Button(200, 200, 100, 50, "Restart Game");
 
 
-class Obstacle {
+class obstacle {
     constructor(x, y, r, g, b, speed, addSpeed) {
         this.x = x;
         this.y = y;
@@ -136,10 +136,13 @@ class Obstacle {
         this.addSpeed = addSpeed;
     
     }
+
+    update() {
     if (this.x <= 800) {
         this.x = this.x + (this.speed + this.addSpeed);
     } else if (this.x > 800) {
         this.x = 0 - 100;
+    }
     }
 
     draw() {
@@ -152,9 +155,9 @@ class Obstacle {
     }
 
 
-const Obstacle1 = new Obstacle(50, 400, 250, 250, 250, 0, 0);
+const obstacle1 = new obstacle(50, 400, 250, 250, 250, 0, 0);
 
-let Obsticle = [Obsticle1]
+let obsticle = [obsticle1];
 
 
 //function level1() { 
@@ -193,7 +196,11 @@ function draw() {
        restartButton.draw();
     }
 
-    for (let i = 0; )
+    for (let i = 0; i < obstacles.length; i++) {
+        obstacles[i].update();
+        obstacles[i].draw();
+    }
+    
 
     //loops the obstacle 
 
