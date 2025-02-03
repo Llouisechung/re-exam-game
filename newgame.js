@@ -93,7 +93,7 @@ function gameWin() {
   background(0);
   fill(255);
   textSize(30);
-  text("You Succeeded! ", 300, 150);
+  text("You Succeeded!", 300, 150);
   pop();
 }
 
