@@ -157,7 +157,7 @@ class obstacle {
 
 const obstacle1 = new obstacle(50, 400, 250, 250, 250, 0, 0);
 
-let obsticle = [obsticle1];
+let obstacles = [obstacle1];
 
 
 //function level1() { 
