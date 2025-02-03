@@ -203,8 +203,6 @@ function draw() {
     
 
     //loops the obstacle 
-
-
   }
   
 
