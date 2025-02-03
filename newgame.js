@@ -1,7 +1,8 @@
-let x = 400;
-let y = 570;
-let gameState = "playing";
-let gameLives =3;
+let startX = 400;
+let startY = 570;
+let gameState = "start";
+let startLives = 2;
+let gameLives = startLives;
 
 function setup() {
   createCanvas(800, 600);
@@ -29,6 +30,8 @@ class character {
     this.y += y;
   }
 
+
+//
   update() {
     this.move(0, 0);
     if (keyIsDown(UP_ARROW)) {
@@ -42,6 +45,10 @@ class character {
     }
     if (keyIsDown(RIGHT_ARROW)) {
       this.move(5, 0);
+    }
+
+    if (this.y < 40) {
+      gameState = "gameSucceeded";
     }
   }
 }
@@ -106,6 +113,8 @@ function gameLose() {
   pop();
 }
 
+
+ 
 class Button {
   constructor(x, y, width, height, text) {
     this.x = x;
@@ -115,28 +124,14 @@ class Button {
     this.text = text;
   }
 
-  isPressed(x, y) {
-    console.log(
-      this.x +
-        "+" +
-        this.width +
-        "/" +
-        this.y +
-        "+" +
-        this.height +
-        "     " +
-        x +
-        " " +
-        y
-    );
 
+  isPressed(x, y) {
     if (
       x > this.x &&
       x < this.x + this.width &&
       y > this.y &&
       y < this.y + this.height
     ) {
-      console.log("DONE");
       return true;
     }
 
@@ -154,14 +149,14 @@ class Button {
     fill(255, 0, 0);
     textSize(this.height / 2);
     textAlign(CENTER, CENTER);
-    text(this.text, this.width - 20, this.height / 2);
+    text(this.text, this.width - 100, this.height / 2);
     pop();
   }
 }
 
-const startButton = new Button(200, 200, 100, 50, "Press to start");
-const homescreen = new Button(200, 200, 100, 50, "Homescreen");
-const restartButton = new Button(200, 200, 100, 50, "Restart Game");
+const startButton = new Button(300, 200, 200, 50, "Press to start");
+const homescreen = new Button(300, 200, 200, 50, "Homescreen");
+const restartButton = new Button(300, 200, 200, 50, "Restart Game");
 
 class obstacle {
   constructor(x, y, r, g, b, speed, addSpeed) {
@@ -186,9 +181,15 @@ class obstacle {
       character1.x + 50 > this.x &&
       character1.y < this.y + 100 &&
       character1.y + 50 > this.y
-    ) {-
-      gameState = "gameOver";
-      gameState = gameLives= 1;
+    ) {
+      // checks when gamelife reached zero you lose. Character starting point whenever you dies
+      if (gameLives === 0) {
+        gameState = "gameOver";
+      } else {
+        gameLives -= 1;
+        character1.x = startX;
+        character1.y = startY;
+      }
     }
   }
 
@@ -206,19 +207,16 @@ const obstacle3 = new obstacle(480, 200, 255, 0, 0, 4, 0);
 const obstacle4 = new obstacle(480, 400, 250, 250, 0, 8, 0);
 let obstacles = [obstacle1, obstacle2, obstacle3, obstacle4];
 
-
-
-//obsticle arrays
-//let squareForward = []
-//let squareBackwards
-
+//character restart point when return button is pressed.
 function mousePressed() {
   if (restartButton.isPressed(mouseX, mouseY)) {
     gameState = "playing";
-    x = 400;
-    y = 570;
+    character1.x = startX;
+    character1.y = startY;
+    gameLives = startLives;
+  } 
   }
-}
+
 
 function draw() {
   background(169, 169, 169);
@@ -240,7 +238,6 @@ function draw() {
     gameLose();
     restartButton.draw();
   }
-
   for (let i = 0; i < obstacles.length; i++) {
     obstacles[i].update();
     obstacles[i].draw();
