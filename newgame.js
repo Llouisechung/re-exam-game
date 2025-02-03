@@ -196,8 +196,6 @@ function draw() {
     for (let i = 0; )
 
     //loops the obstacle 
-
-
   }
   
 
