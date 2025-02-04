@@ -30,8 +30,7 @@ class character {
     this.y += y;
   }
 
-
-//
+  //
   update() {
     this.move(0, 0);
     if (keyIsDown(UP_ARROW)) {
@@ -113,8 +112,6 @@ function gameLose() {
   pop();
 }
 
-
- 
 class Button {
   constructor(x, y, width, height, text) {
     this.x = x;
@@ -123,7 +120,6 @@ class Button {
     this.height = height;
     this.text = text;
   }
-
 
   isPressed(x, y) {
     if (
@@ -202,10 +198,22 @@ class obstacle {
 }
 
 const obstacle1 = new obstacle(50, 400, 0, 250, 250, 8, 0);
-const obstacle2 = new obstacle(50, 200, 255, 0, 0, 4, 0);
-const obstacle3 = new obstacle(480, 200, 255, 0, 0, 4, 0);
+const obstacle2 = new obstacle(50, 200, 255, 0, 0, 10, 0);
+const obstacle3 = new obstacle(480, 200, 255, 0, 0, 10, 0);
 const obstacle4 = new obstacle(480, 400, 250, 250, 0, 8, 0);
 let obstacles = [obstacle1, obstacle2, obstacle3, obstacle4];
+
+class log {
+  constructor(x, y, r, g, b, speed, addSpeed) {
+    this.x = x;
+    this.y = y;
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.speed = speed;
+    this.addSpeed = addSpeed;
+  }
+}
 
 //character restart point when return button is pressed.
 function mousePressed() {
@@ -214,18 +222,17 @@ function mousePressed() {
     character1.x = startX;
     character1.y = startY;
     gameLives = startLives;
-  } 
   }
+}
 
 //The following 7 lines is adapted from https://chatgpt.com/share/67a14f4c-3f04-8008-a84e-5b77d81cf43f
-  function drawLives() {
-    push();
-    fill(0);
-    textSize(25);
-    text("Lives: " + (gameLives + 1), 30, 30);
-    pop();
-  }
-
+function drawLives() {
+  push();
+  fill(0);
+  textSize(25);
+  text("Lives: " + (gameLives + 1), 30, 30);
+  pop();
+}
 
 function draw() {
   background(169, 169, 169);
@@ -252,5 +259,4 @@ function draw() {
     gameLose();
     restartButton.draw();
   }
- 
 }
