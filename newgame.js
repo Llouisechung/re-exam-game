@@ -6,7 +6,6 @@ let gameLives = startLives;
 
 function setup() {
   createCanvas(800, 600);
-  background(100);
   noStroke();
 }
 
@@ -32,27 +31,46 @@ class character {
 
   //
   update() {
-    this.move(0, 0);
-    if (keyIsDown(UP_ARROW)) {
-      this.move(0, -5);
-    }
-    if (keyIsDown(DOWN_ARROW)) {
-      this.move(0, 5);
-    }
-    if (keyIsDown(LEFT_ARROW)) {
-      this.move(-5, 0);
-    }
-    if (keyIsDown(RIGHT_ARROW)) {
-      this.move(5, 0);
-    }
+    // The following
+    //checking if character moves with the log otherwise character dies
+    let onLog = false;
 
+    if (this.y < 200 && this.y > 100) {
+      for (let i = 0; i < logs.length; i++) {
+        let logObject = logs[i];
+
+        if (
+          this.x + this.width > logObject.x &&
+          this.x < logObject.x + logObject.width &&
+          this.y + this.height >= logObject.y &&
+          this.y + this.height <= logObject.y + logObject.height
+        ) {
+          //character moves with the log if character is on it
+          this.x += logObject.speed;
+          onLog = true;
+          break;
+        }
+      }
+
+      //character dies if fallen into water
+      if (!onLog) {
+        if (gameLives === 0) {
+          gameState = "gameOver";
+        } else {
+          gameLives -= 1;
+          this.x = startX;
+          this.y = startY;
+        }
+      }
+    }
+    //player wins in reached goal
     if (this.y < 40) {
       gameState = "gameSucceeded";
     }
   }
 }
 
-const character1 = new character(350, 550, 50, 50);
+const character1 = new character(startX, startY, 50, 50);
 
 function safeGround() {
   //Safe grounds between the starting and end ground
@@ -154,10 +172,12 @@ const startButton = new Button(300, 200, 200, 50, "Press to start");
 const homescreen = new Button(300, 200, 200, 50, "Homescreen");
 const restartButton = new Button(300, 200, 200, 50, "Restart Game");
 
-class obstacle {
-  constructor(x, y, r, g, b, speed, addSpeed) {
+class Obstacle {
+  constructor(x, y, width, height, r, g, b, speed, addSpeed) {
     this.x = x;
     this.y = y;
+    this.width = width;
+    this.height = height;
     this.r = r;
     this.g = g;
     this.b = b;
@@ -166,17 +186,19 @@ class obstacle {
   }
 
   update() {
+    //moved the obstacle in x-position
     if (this.x <= 800) {
       this.x = this.x + (this.speed + this.addSpeed);
     } else if (this.x > 800) {
       this.x = 0 - 100;
     }
 
+    //checks if character is colliding with obstacle
     if (
-      character1.x < this.x + 100 &&
-      character1.x + 50 > this.x &&
-      character1.y < this.y + 100 &&
-      character1.y + 50 > this.y
+      character1.x < this.x + this.width &&
+      character1.x + character1.width > this.x &&
+      character1.y < this.y + this.height &&
+      character1.y + character1.height > this.y
     ) {
       // checks when gamelife reached zero you lose. Character starting point whenever you dies
       if (gameLives === 0) {
@@ -197,26 +219,51 @@ class obstacle {
   }
 }
 
-const obstacle1 = new obstacle(50, 400, 0, 250, 250, 8, 0);
-const obstacle2 = new obstacle(50, 200, 255, 0, 0, 10, 0);
-const obstacle3 = new obstacle(480, 200, 255, 0, 0, 10, 0);
-const obstacle4 = new obstacle(480, 400, 250, 250, 0, 8, 0);
+const obstacle1 = new Obstacle(50, 400, 150, 50, 0, 250, 250, 8, 0);
+const obstacle2 = new Obstacle(50, 200, 150, 50, 255, 0, 0, 10, 0);
+const obstacle3 = new Obstacle(480, 200, 150, 50, 255, 0, 0, 10, 0);
+const obstacle4 = new Obstacle(480, 400, 150, 50, 250, 250, 0, 8, 0);
+
+//obstacles array
 let obstacles = [obstacle1, obstacle2, obstacle3, obstacle4];
 
-class log {
-  constructor(x, y, r, g, b, speed, addSpeed) {
-    this.x = x;
-    this.y = y;
-    this.r = r;
-    this.g = g;
-    this.b = b;
-    this.speed = speed;
-    this.addSpeed = addSpeed;
+class Log extends Obstacle {
+  constructor(x, y, width, height, speed, addSpeed) {
+    super(x, y, width, height, 139, 69, 19, speed, addSpeed);
+  }
+  update() {
+    if (this.x <= 800) {
+      this.x = this.x + (this.speed + this.addSpeed);
+    } else if (this.x > 800) {
+      this.x = 0 - 100;
+    }
+
+    if (
+      character1.x + character1.width > this.x &&
+      character1.x < this.x + this.width &&
+      character1.y + character1.height >= this.y &&
+      character1.y + character1.height <= this.y + 50
+    ) {
+      character1.x += this.speed;
+    }
   }
 }
 
+const log1 = new Log(50, 100, 150, 50, 4, 0);
+const log2 = new Log(600, 100, 150, 50, 4, 0);
+
+//logs array
+const logs = [log1, log2];
+
 //character restart point when return button is pressed.
 function mousePressed() {
+  if (startButton.isPressed(mouseX, mouseY)) {
+    gameState = "playing";
+    character1.x = startX;
+    character1.y = startY;
+    gameLives = startLives;
+  }
+
   if (restartButton.isPressed(mouseX, mouseY)) {
     gameState = "playing";
     character1.x = startX;
@@ -245,12 +292,18 @@ function draw() {
     startscreen();
     startButton.draw();
   } else if (gameState === "playing") {
-    character1.draw();
-    character1.update();
     for (let i = 0; i < obstacles.length; i++) {
       obstacles[i].update();
       obstacles[i].draw();
     }
+
+    for (let i = 0; i < logs.length; i++) {
+      logs[i].update();
+      logs[i].draw();
+    }
+    character1.draw();
+    character1.update();
+
     drawLives();
   } else if (gameState === "gameSucceeded") {
     gameWin();
