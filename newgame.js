@@ -1,6 +1,6 @@
 let startX = 400;
 let startY = 570;
-let gameState = "start";
+let gameState = "playing";
 let startLives = 2;
 let gameLives = startLives;
 
@@ -217,6 +217,15 @@ function mousePressed() {
   } 
   }
 
+//The following 7 lines is adapted from https://chatgpt.com/share/67a14f4c-3f04-8008-a84e-5b77d81cf43f
+  function drawLives() {
+    push();
+    fill(0);
+    textSize(25);
+    text("Lives: " + (gameLives + 1), 30, 30);
+    pop();
+  }
+
 
 function draw() {
   background(169, 169, 169);
@@ -231,6 +240,11 @@ function draw() {
   } else if (gameState === "playing") {
     character1.draw();
     character1.update();
+    for (let i = 0; i < obstacles.length; i++) {
+      obstacles[i].update();
+      obstacles[i].draw();
+    }
+    drawLives();
   } else if (gameState === "gameSucceeded") {
     gameWin();
     homescreen.draw();
@@ -238,8 +252,5 @@ function draw() {
     gameLose();
     restartButton.draw();
   }
-  for (let i = 0; i < obstacles.length; i++) {
-    obstacles[i].update();
-    obstacles[i].draw();
-  }
+ 
 }
