@@ -17,7 +17,7 @@ function setup() {
 
 class character {
   constructor(x, y, width, height) {
-    this.x = x;
+    this.x = x;  
     this.y = y;
     this.width = width;
     this.height = height;
@@ -25,7 +25,7 @@ class character {
 
   draw() {
     push();
-    fill(250);
+    fill(154,205,50);
     square(this.x, this.y, this.width);
     pop();
   }
@@ -81,7 +81,7 @@ if (!onLog) {
   }
   if (keyIsDown(RIGHT_ARROW)) {
     this.move(5, 0);
-  }
+  } 
 
 
     //player gains a point, after 3 points player wins. 
@@ -92,10 +92,13 @@ if (!onLog) {
      }
      if(score === 3) {
       gameState = "gameSucceeded";
+      character1.x = startX;
+      character1.y = startY;
+      
      }  
     
     }
- }
+ } 
 
 const character1 = new character(350, 550, 50, 50);
 
@@ -133,16 +136,28 @@ function water() {
 
 function startscreen() {
   push();
-  background(0);
-  fill(255);
+  background(255,211,182);
+  fill(0);
   textSize(30);
   text("Skipper Game", 300, 150);
+  pop();
+
+  push();
+  fill(0);
+  textSize(20);
+  text("Use the arrow keys to play. Gain 3 points to win! ", 200, 350);
+  pop();
+
+  push();
+  fill(0);
+  textSize(100);
+  text("🐸", 330,450);
   pop();
 }
 function gameWin() {
   push();
-  background(0);
-  fill(255);
+  background(220,237,193);
+  fill(0);
   textSize(30);
   text("You Succeeded!", 300, 150);
   pop();
@@ -150,8 +165,8 @@ function gameWin() {
 
 function gameLose() {
   push();
-  background(0);
-  fill(255);
+  background(255,139,148);
+  fill(0);
   textSize(30);
   text("You Have Lost", 300, 150);
   pop();
@@ -245,10 +260,10 @@ class Obstacle {
   }
 }
 
-const obstacle1 = new Obstacle(50, 400, 100, 100, 0, 250, 250, 8, 1);
-const obstacle2 = new Obstacle(50, 200, 100, 100,  255, 0, 0, 5, 1);
-const obstacle3 = new Obstacle(480, 200, 100, 100, 255, 0, 0, 5, 1);
-const obstacle4 = new Obstacle(480, 400, 100, 100, 250, 250, 0, 8, 1);
+const obstacle1 = new Obstacle(50, 400, 100, 100, 217, 59, 58 , 8, 1);
+const obstacle2 = new Obstacle(50, 200, 100, 100, 235 , 121 ,61, 5, 1);
+const obstacle3 = new Obstacle(480, 200, 100, 100, 197, 228 ,230, 5, 1);
+const obstacle4 = new Obstacle(480, 400, 100, 100, 43 ,38 ,34, 8, 1);
 
 //obstacles array
 let obstacles = [obstacle1, obstacle2, obstacle3, obstacle4];
@@ -273,13 +288,15 @@ const log2 = new Log(600, 100, 150, 100, 4, 1);
 //logs array
 const logs = [log1, log2];
 
-//character restart point when return button is pressed.
+
 function mousePressed() {
+  //character restart point when return button is pressed.
   if (startButton.isPressed(mouseX, mouseY)) {
     gameState = "playing";
     character1.x = startX;
     character1.y = startY;
     gameLives = startLives;
+    score = 0;
   }
   
   if (restartButton.isPressed(mouseX, mouseY)) {
@@ -287,11 +304,13 @@ function mousePressed() {
     character1.x = startX;
     character1.y = startY;
     gameLives = startLives;
+    score = 0;
   }
 }
 
-//The following 7 lines is adapted from https://chatgpt.com/share/67a14f4c-3f04-8008-a84e-5b77d81cf43f
+
 function drawLives() {
+  //The following 5 lines is adapted from https://chatgpt.com/share/67a14f4c-3f04-8008-a84e-5b77d81cf43f
   push();
   fill(0);
   textSize(25);
@@ -317,6 +336,7 @@ function draw() {
   if (gameState === "start") {
     startscreen();
     startButton.draw();
+
   } else if (gameState === "playing") {
 
     for (let i = 0; i < obstacles.length; i++) {
@@ -336,6 +356,7 @@ function draw() {
   } else if (gameState === "gameSucceeded") {
     gameWin();
    restartButton.draw();
+   
   } else if (gameState === "gameOver") {
     gameLose();
     restartButton.draw();
